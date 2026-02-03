@@ -139,7 +139,6 @@ To improve performance, increase the `INTERVAL` value in `c_prevent.lua`.
 ### Using Walls
 ```
 /wall              // Enable walls - now see all players within 500m
-/wall 0            // Disable walls
 ```
 
 ### Spectating Players

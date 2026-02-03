@@ -1,8 +1,8 @@
-# GZ-Prevent - Staff Monitoring System
+# Prevent - Staff Monitoring System
 
 ## 📋 Description
 
-GZ-Prevent is a resource (mod) for **Multi Theft Auto: San Andreas** designed to facilitate player monitoring by the administration team. The system provides advanced surveillance and spectating tools for staff members.
+Prevent is a resource (mod) for **Multi Theft Auto: San Andreas** designed to facilitate player monitoring by the administration team. The system provides advanced surveillance and spectating tools for staff members.
 
 **Author:** Rougue#8075  
 **Version:** 1.0  
@@ -59,7 +59,7 @@ Unauthorized users will receive no response when attempting commands.
 ## 📂 File Structure
 
 ```
-gz-prevent/
+Prevent/
 ├── c_prevent.lua      # Client-side script (runs on player's computer)
 ├── s_prevent.lua      # Server-side script (manages permissions & sync)
 ├── meta.xml           # Resource metadata file
@@ -109,14 +109,14 @@ gz-prevent/
 
 ## 🚀 Installation
 
-1. Place the `gz-prevent` folder in:
+1. Place the `Prevent` folder in:
    ```
    server/mods/deathmatch/resources/
    ```
 
 2. Start the server or execute:
    ```
-   /start gz-prevent
+   /start Prevent
    ```
 
 3. The resource will load automatically and commands will be available for staff members
@@ -175,7 +175,7 @@ To improve performance, increase the `INTERVAL` value in `c_prevent.lua`.
 - Check server console for error messages
 
 ### Wall hack shows no players
-- Ensure `gz-prevent` resource is active
+- Ensure `Prevent` resource is active
 - Verify there are players within 500 meters
 - Check that wall hack is toggled on with `/wall`
 

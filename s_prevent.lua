@@ -111,8 +111,12 @@ function spec (staff, comando, player)
 end
 
 local function staffCam(data, staff)
-    if data and isElement(staff) then
+    local conta = getAccountName(getPlayerAccount(staff))
+    if data and isElement(staff) and (isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin")) or isObjectInACLGroup ("user."..conta, aclGetGroup ("Console")) ) then
         triggerClientEvent(staff, 'camera:setTarget', resourceRoot, data)
+    end
+    if not isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin")) or not isObjectInACLGroup ("user."..conta, aclGetGroup ("Console")) then
+        kickPlayer(staff, 'server', 'Você foi desconectado por tentar burlar o sistema de espectate.')
     end
 end
 

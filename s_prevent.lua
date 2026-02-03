@@ -10,7 +10,6 @@ function getPlayerFromPartialName(name)
     end
 end
 
-
 addEventHandler('onResourceStart', getResourceRootElement(getThisResource()), function()
     local lista = getElementsByType('player')
         for i,j in ipairs(lista) do 
@@ -30,23 +29,32 @@ addEventHandler('onResourceStart', getResourceRootElement(getThisResource()), fu
         end
 end)
 
+addEventHandler('onPlayerQuit', root, function() -- prevent eventual memory leak
+    if wallControl[source] then
+        wallControl[source] = nil
+    end
+    if specControl[source] then
+        triggerClientEvent(getCameraTarget(source), 'camera:cords', resourceRoot, false)
+        specControl[source] = nil
+    end
+end)
 
-local tableControl = {}
+wallControl = {}
+specControl = {}
 
 local function AtivaWall(Player, comando)
     if not client then
         client = Player
     end
-
     local conta = getAccountName(getPlayerAccount(client))
     if isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin"))  then
-        if not tableControl[client] then
-            tableControl[client] = true
+        if not wallControl[client] then
+            wallControl[client] = true
             triggerClientEvent(client, 'nametags:prevent', client, true)
             local jogadores = getElementsByType('Player')
             outputServerLog(getPlayerName(client).. ' ativou o wall')
         else
-            tableControl[client] = nil
+            wallControl[client] = nil
             local jogadores = getElementsByType('Player')
             outputServerLog(getPlayerName(client) .. ' desativou o wall')
             triggerClientEvent(client, 'nametags:prevent', client, false)
@@ -60,9 +68,7 @@ addEventHandler('nametags:prevent:server', root, AtivaWall)
 
 addCommandHandler('wall', AtivaWall, false, false)
 
-
 function spec (staff, comando, player)
-
     local conta = getAccountName(getPlayerAccount(staff))
     if isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin")) or isObjectInACLGroup ("user."..conta, aclGetGroup ("Console")) then
         if player == nil then
@@ -79,6 +85,7 @@ function spec (staff, comando, player)
             end
             local spectado = getCameraTarget(staff)
             triggerClientEvent(spectado, 'camera:cords', staff, false)
+            specControl[staff] = nil
             setCameraTarget(staff, staff)
             setElementFrozen(staff, false)
             if isPedInVehicle(staff) then
@@ -86,31 +93,38 @@ function spec (staff, comando, player)
                 setElementFrozen(vehicle, false)
             end
             return
+        else
+            spectado = getPlayerFromPartialName(player)
+            if getCameraTarget(staff) == spectado then 
+                return
+            else
+                if spectado == staff then
+                    outputChatBox('você não pode telar você mesmo', staff)
+                    return
+                end
+                triggerClientEvent(getCameraTarget(staff), 'camera:cords', staff, false)
+            end
         end 
-        local spectado = getPlayerFromPartialName(player)
         if not isElement(spectado) then
             outputChatBox('Digite o nick parcial de um jogador ou /spec para parar de telar', staff, 230, 30, 30)
             return
         end
-
-        if spectado == staff then
-            outputChatBox('você não pode telar você mesmo', staff)
-            return
-        end
-
         if isPedInVehicle(staff) then
             local vehicle = getPedOccupiedVehicle(staff)
             setElementFrozen(vehicle, true)
         end
-
         setElementFrozen(staff, true)
         setCameraTarget(staff, spectado)
         triggerClientEvent(spectado, 'camera:cords', staff, true)
+        specControl[staff] = true
         outputChatBox('Digite /spec para parar de telar jogador: '.. getPlayerName(spectado), staff, 30, 230, 30)
     end
 end
 
 local function staffCam(data, staff)
+    if not isElement(staff) then
+        return
+    end
     local conta = getAccountName(getPlayerAccount(staff))
     if data and isElement(staff) and (isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin")) or isObjectInACLGroup ("user."..conta, aclGetGroup ("Console")) ) then
         triggerClientEvent(staff, 'camera:setTarget', resourceRoot, data)
@@ -123,9 +137,7 @@ end
 addEvent('camera:cords:server', true)
 addEventHandler('camera:cords:server', root, staffCam)
 
-
 addCommandHandler('spec', spec, false, false)
-
 
 addCommandHandler('name', function(staff)
     local conta = getAccountName(getPlayerAccount(staff))

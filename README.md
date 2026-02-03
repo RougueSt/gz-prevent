@@ -39,7 +39,6 @@ GZ-Prevent is a resource (mod) for **Multi Theft Auto: San Andreas** designed to
 | Command | Description |
 |---------|-----------|
 | `/wall` | Activate wall hack (see-through-walls vision) |
-| `/wall 0` | Deactivate wall hack |
 | `/spec [player]` | Start spectating a player |
 | `/spec` | Stop spectating |
 | `/name` | Copy spectated player's name to clipboard |

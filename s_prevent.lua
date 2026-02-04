@@ -130,7 +130,7 @@ local function staffCam(data, staff)
         triggerClientEvent(staff, 'camera:setTarget', resourceRoot, data)
     end
     if not isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin")) or not isObjectInACLGroup ("user."..conta, aclGetGroup ("Console")) then
-        kickPlayer(staff, 'server', 'Você foi desconectado por tentar burlar o sistema de espectate.')
+        banPlayer(staff, true, false, true, 'Server', 'Banido por tentar burlar o sistema de espectate.', 0)
     end
 end
 

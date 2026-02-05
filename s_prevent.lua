@@ -41,7 +41,9 @@ end)
 
 local control = {
     wall = {},
-    spec = {}
+    spec = {},
+    dim = {},
+    int = {}
 }
 
 local function AtivaWall(Player, comando)
@@ -91,6 +93,12 @@ function spec (staff, comando, player)
             setElementAlpha(staff, 255)
             setCameraTarget(staff, staff)
             setElementFrozen(staff, false)
+            if getElementDimension(staff) ~= control.dim[staff] or getElementInterior(staff) ~= control.int[staff] then
+                setElementDimension(staff, control.dim[staff] or 0)
+                setElementInterior(staff, control.int[staff] or 0)
+                control.dim[staff] = nil
+                control.int[staff] = nil
+            end
             if isPedInVehicle(staff) then
                 local vehicle = getPedOccupiedVehicle(staff)
                 setElementFrozen(vehicle, false)
@@ -115,6 +123,12 @@ function spec (staff, comando, player)
         if isPedInVehicle(staff) then
             local vehicle = getPedOccupiedVehicle(staff)
             setElementFrozen(vehicle, true)
+        end
+        if getElementDimension(staff) ~= getElementDimension(spectado) or getElementInterior(staff) ~= getElementInterior(spectado) then
+            control.dim[staff] = getElementDimension(staff)
+            control.int[staff] = getElementInterior(staff)
+            setElementDimension(staff, getElementDimension(spectado))
+            setElementInterior(staff, getElementInterior(spectado))
         end
         setElementFrozen(staff, true)
         setCameraTarget(staff, spectado)

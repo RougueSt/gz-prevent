@@ -30,17 +30,19 @@ addEventHandler('onResourceStart', getResourceRootElement(getThisResource()), fu
 end)
 
 addEventHandler('onPlayerQuit', root, function() -- prevent eventual memory leak
-    if wallControl[source] then
-        wallControl[source] = nil
-    end
-    if specControl[source] then
-        triggerClientEvent(getCameraTarget(source), 'camera:cords', resourceRoot, false)
-        specControl[source] = nil
+    for i, j in pairs(control) do
+        for a, b in pairs(j) do
+            if a == source then
+                control[i][a] = nil
+            end
+        end
     end
 end)
 
-wallControl = {}
-specControl = {}
+local control = {
+    wall = {},
+    spec = {}
+}
 
 local function AtivaWall(Player, comando)
     if not client then
@@ -48,13 +50,13 @@ local function AtivaWall(Player, comando)
     end
     local conta = getAccountName(getPlayerAccount(client))
     if isObjectInACLGroup ("user."..conta, aclGetGroup ("Admin"))  then
-        if not wallControl[client] then
-            wallControl[client] = true
+        if not control.wall[client] then
+            control.wall[client] = true
             triggerClientEvent(client, 'nametags:prevent', client, true)
             local jogadores = getElementsByType('Player')
             outputServerLog(getPlayerName(client).. ' ativou o wall')
         else
-            wallControl[client] = nil
+            control.wall[client] = nil
             local jogadores = getElementsByType('Player')
             outputServerLog(getPlayerName(client) .. ' desativou o wall')
             triggerClientEvent(client, 'nametags:prevent', client, false)
@@ -85,7 +87,8 @@ function spec (staff, comando, player)
             end
             local spectado = getCameraTarget(staff)
             triggerClientEvent(spectado, 'camera:cords', staff, false)
-            specControl[staff] = nil
+            control.spec[staff] = nil
+            setElementAlpha(staff, 255)
             setCameraTarget(staff, staff)
             setElementFrozen(staff, false)
             if isPedInVehicle(staff) then
@@ -116,7 +119,8 @@ function spec (staff, comando, player)
         setElementFrozen(staff, true)
         setCameraTarget(staff, spectado)
         triggerClientEvent(spectado, 'camera:cords', staff, true)
-        specControl[staff] = true
+        control.spec[staff] = true
+        setElementAlpha(staff, 0)
         outputChatBox('Digite /spec para parar de telar jogador: '.. getPlayerName(spectado), staff, 30, 230, 30)
     end
 end

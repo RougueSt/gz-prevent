@@ -20,7 +20,7 @@ function wall(comando, arg1)
         if distance < 500 then 
             Px, Py, Pz = getScreenFromWorldPosition(x, y, z)
             if Px and Py then
-                dxDrawText(getVehicleName(j).. '| '.. math.floor(Pz).. 'm', Px+1, Py+2, Px, Py, tocolor(0,0,0), fontSize, font)
+                dxDrawText(getVehicleName(j).. '| '.. math.floor(Pz).. 'm', Px-1, Py+2, Px, Py, tocolor(0,0,0), fontSize, font)
                 dxDrawText(getVehicleName(j).. '| '.. math.floor(Pz).. 'm', Px, Py, Px, Py, tocolor(250,250,250), fontSize, font)
             end
                 
@@ -33,7 +33,7 @@ function wall(comando, arg1)
             Px, Py, Pz = getScreenFromWorldPosition(x, y, z)
             if Px and Py then
                 if getPlayerTeam(j) == false then
-                    r, g, b = 255, 255, 255
+                    r, g, b = 255, 50, 50
                 else
                     r, g, b = getTeamColor(getPlayerTeam(j))
                 end
@@ -45,8 +45,10 @@ function wall(comando, arg1)
                 end
                 --dxDrawText(getPlayerName(j)..' | ' .. math.floor(Pz).. 'm', Px+1, Py + 7, Px, Py, tocolor(0,0,0), fontSize, font)
                 if j ~= localPlayer then
-                    dxDrawText(getPlayerName(j)..' | ' .. math.floor(Pz).. 'm', Px, Py + 5, Px, Py, tocolor(r, g, b), fontSize, "default-bold")
-                    dxDrawText('Health: '.. tostring(tonumber(health)) .. ' | ' .. 'Armor: ' .. tostring(tonumber(armor)), Px, Py + 20, Px, Py, tocolor(r, g, b), fontSize, "default-bold")
+                    dxDrawText(getPlayerName(j)..' | ' .. math.floor(Pz).. 'm', Px, Py + 5, Px, Py, tocolor(0, 0, 0), fontSize, "default-bold")
+                    dxDrawText(getPlayerName(j)..' | ' .. math.floor(Pz).. 'm', Px-1, Py + 3, Px, Py, tocolor(r, g, b), fontSize, "default-bold")
+                    dxDrawText('Health: '.. tostring(tonumber(health)) .. ' | ' .. 'Armor: ' .. tostring(tonumber(armor)), Px, Py + 22, Px, Py, tocolor(0, 0, 0), fontSize, "default-bold")
+                    dxDrawText('Health: '.. tostring(tonumber(health)) .. ' | ' .. 'Armor: ' .. tostring(tonumber(armor)), Px-1, Py + 20, Px, Py, tocolor(r, g, b), fontSize, "default-bold")
                 end
                 --[[ dxDrawText('Player '.. '| '.. math.floor(Pz).. 'm', Px+1, Py+2 + 5, Px, Py, tocolor(0,0,0), fontSize, font)
                 dxDrawText('Player '.. '| '.. math.floor(Pz).. 'm', Px, Py + 5, Px, Py, tocolor(30,230,230), fontSize, font) ]]
